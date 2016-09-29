@@ -732,6 +732,62 @@ GLFWAPI int glfwGetWindowAttrib(GLFWwindow* handle, int attrib)
     return 0;
 }
 
+GLFWAPI void glfwSetWindowAttrib(GLFWwindow* handle, int attrib, int value)
+{
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+    assert(window != NULL);
+
+    _GLFW_REQUIRE_INIT();
+
+    switch (attrib)
+    {
+        case GLFW_RESIZABLE:
+        {
+            const GLFWbool resizable = value ? GLFW_TRUE : GLFW_FALSE;
+            if (window->resizable != resizable)
+            {
+                window->resizable = resizable;
+                if (!window->monitor)
+                    _glfwPlatformSetWindowResizable(window, resizable);
+            }
+
+            return;
+        }
+
+        case GLFW_DECORATED:
+        {
+            const GLFWbool decorated = value ? GLFW_TRUE : GLFW_FALSE;
+            if (window->decorated != decorated)
+            {
+                window->decorated = decorated;
+                if (!window->monitor)
+                    _glfwPlatformSetWindowDecorated(window, decorated);
+            }
+
+            return;
+        }
+
+        case GLFW_FLOATING:
+        {
+            const GLFWbool floating = value ? GLFW_TRUE : GLFW_FALSE;
+            if (window->floating != floating)
+            {
+                window->floating = floating;
+                if (!window->monitor)
+                    _glfwPlatformSetWindowFloating(window, floating);
+            }
+
+            return;
+        }
+
+        case GLFW_AUTO_ICONIFY:
+            window->autoIconify = value ? GLFW_TRUE : GLFW_FALSE;
+            return;
+    }
+
+    _glfwInputError(GLFW_INVALID_ENUM, "Invalid window attribute %i", attrib);
+}
+
 GLFWAPI GLFWmonitor* glfwGetWindowMonitor(GLFWwindow* handle)
 {
     _GLFWwindow* window = (_GLFWwindow*) handle;

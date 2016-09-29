@@ -916,16 +916,23 @@ the window or framebuffer is resized.
 @subsection window_attribs Window attributes
 
 Windows have a number of attributes that can be returned using @ref
-glfwGetWindowAttrib.  Some reflect state that may change during the lifetime of
-the window, while others reflect the corresponding hints and are fixed at the
-time of creation.  Some are related to the actual window and others to its
-context.
+glfwGetWindowAttrib.  Some reflect state that may change as a result of user
+interaction, (e.g. whether it has input focus), while others reflect inherent
+properties of the window (e.g. what kind of border it has).  Some are related to
+the window and others to its OpenGL or OpenGL ES context.
 
 @code
 if (glfwGetWindowAttrib(window, GLFW_FOCUSED))
 {
     // window has input focus
 }
+@endcode
+
+The attributes that determine how the window behaves can be changed with @ref
+glfwSetWindowAttrib.
+
+@code
+glfwSetWindowAttrib(window, GLFW_RESIZABLE, GLFW_FALSE);
 @endcode
 
 

@@ -16,6 +16,13 @@ GLFW now supports querying the platform dependent scancode of any key with
 @ref glfwGetKeyScancode.
 
 
+@subsection news_33_setwindowattrib Support for updating window attributes
+
+GLFW now supports changing the `GLFW_DECORATED`, `GLFW_RESIZABLE`,
+`GLFW_FLOATING` and `GLFW_AUTO_ICONIFY` attributes for existing windows with
+@ref glfwSetWindowAttrib.
+
+
 @section news_32 New features in 3.2
 
 

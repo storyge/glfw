@@ -2517,6 +2517,27 @@ GLFWAPI void glfwSetWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, int 
  */
 GLFWAPI int glfwGetWindowAttrib(GLFWwindow* window, int attrib);
 
+/*! @brief Sets an attribute of the specified window.
+ *
+ *  This function sets the value of an attribute of the specified window.
+ *
+ *  @param[in] window The window to set the attribute for.
+ *  @param[in] attrib One of `GLFW_DECORATED`, `GLFW_RESIZABLE`, `GLFW_FLOATING`
+ *  or `GLFW_AUTO_ICONIFY`.
+ *
+ *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED, @ref
+ *  GLFW_INVALID_ENUM, @ref GLFW_INVALID_VALUE and @ref GLFW_PLATFORM_ERROR.
+ *
+ *  @thread_safety This function must only be called from the main thread.
+ *
+ *  @sa @ref window_attribs
+ *
+ *  @since Added in version 3.3.
+ *
+ *  @ingroup window
+ */
+GLFWAPI void glfwSetWindowAttrib(GLFWwindow* window, int attrib, int value);
+
 /*! @brief Sets the user pointer of the specified window.
  *
  *  This function sets the user-defined pointer of the specified window.  The
