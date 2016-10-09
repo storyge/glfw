@@ -595,6 +595,18 @@ int _glfwPlatformWindowMaximized(_GLFWwindow* window)
     return mir_surface_get_state(window->mir.surface) == mir_surface_state_maximized;
 }
 
+void _glfwPlatformSetWindowResizable(_GLFWwindow* window, GLFWbool enabled)
+{
+}
+
+void _glfwPlatformSetWindowDecorated(_GLFWwindow* window, GLFWbool enabled)
+{
+}
+
+void _glfwPlatformSetWindowFloating(_GLFWwindow* window, GLFWbool enabled)
+{
+}
+
 void _glfwPlatformPollEvents(void)
 {
     EventNode* node = NULL;
