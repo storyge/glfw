@@ -27,6 +27,7 @@ option(GLFW_BUILD_DOCS "Build the GLFW documentation" ON)
 option(GLFW_INSTALL "Generate installation target" ON)
 option(GLFW_VULKAN_STATIC "Use the Vulkan loader statically linked into application" OFF)
 option(GLFW_DOCUMENT_INTERNALS "Include internals in documentation" OFF)
+option(GLFW_USE_OSMESA  "Use OSMesa for offscreen context creation" OFF)
 
 if (WIN32)
     option(GLFW_USE_HYBRID_HPG "Force use of high-performance GPU on hybrid systems" OFF)
@@ -41,7 +42,6 @@ endif()
 if (UNIX AND NOT APPLE)
     option(GLFW_USE_WAYLAND "Use Wayland for window creation" OFF)
     option(GLFW_USE_MIR     "Use Mir for window creation" OFF)
-    option(GLFW_USE_OSMESA  "Use OSMesa for offscreen context creation" OFF)
 endif()
 
 if (MSVC)
@@ -326,9 +326,6 @@ endif()
 # Use OSMesa for offscreen context creation
 #--------------------------------------------------------------------
 if (_GLFW_OSMESA)
-    find_package(osmesa REQUIRED)
-    list(APPEND glfw_PKG_DEPS "osmesa")
-
     list(APPEND glfw_INCLUDE_DIRS "${OSMESA_INCLUDE_DIR}")
     list(APPEND glfw_LIBRARIES "${OSMESA_LIBRARIES}"
                                "${CMAKE_THREAD_LIBS_INIT}")

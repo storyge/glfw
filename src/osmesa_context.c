@@ -1,50 +1,66 @@
+//========================================================================
+// GLFW 3.3 OSMesa - www.glfw.org
+//------------------------------------------------------------------------
+// Copyright (c) 2016 Google Inc.
+//
+// This software is provided 'as-is', without any express or implied
+// warranty. In no event will the authors be held liable for any damages
+// arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented; you must not
+//    claim that you wrote the original software. If you use this software
+//    in a product, an acknowledgment in the product documentation would
+//    be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such, and must not
+//    be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source
+//    distribution.
+//
+//========================================================================
 
 #include <stdlib.h>
 #include <string.h>
 
 #include "internal.h"
-#include "osmesa_context.h"
+
 
 static void makeContextCurrentOSMesa(_GLFWwindow* window)
 {
     if (window)
     {
-        // Check to see if we need to allocate a new buffer.
+        // Check to see if we need to allocate a new buffer
         if ((window->context.osmesa.buffer == NULL) ||
             (window->osmesa.width != window->context.osmesa.width) ||
             (window->osmesa.height != window->context.osmesa.height))
         {
-            // Free the current buffer, if necessary.
-            if (window->context.osmesa.buffer != NULL)
-            {
-                free(window->context.osmesa.buffer);
-            }
+            free(window->context.osmesa.buffer);
 
             // Allocate the new buffer (width * height * 1 byte per RGBA
-            // channel).
-            window->context.osmesa.buffer = (unsigned char *) malloc(
-                window->osmesa.width * window->osmesa.height * 4);
+            // channel)
+            window->context.osmesa.buffer = (unsigned char *)
+                malloc(window->osmesa.width * window->osmesa.height * 4);
 
-            // Update the context size.
+            // Update the context size
             window->context.osmesa.width = window->osmesa.width;
             window->context.osmesa.height = window->osmesa.height;
         }
 
-        // Make the context current.
+        // Make the context current
         if (!OSMesaMakeCurrent(window->context.osmesa.handle,
                             window->context.osmesa.buffer,
-                            0x1401, // GL_UNSIGNED_BYTE
+                            GL_UNSIGNED_BYTE,
                             window->osmesa.width, window->osmesa.height))
         {
             _glfwInputError(GLFW_PLATFORM_ERROR,
-                            "OSMesa: Failed to make context current.");
+                            "OSMesa: Failed to make context current");
             return;
         }
-    }
-    else
-    {
-        _glfwInputError(GLFW_PLATFORM_ERROR,
-            "OSMesa: Releasing the current context is not supported.");
     }
 
     _glfwPlatformSetCurrentContext(window);
@@ -52,25 +68,18 @@ static void makeContextCurrentOSMesa(_GLFWwindow* window)
 
 static GLFWglproc getProcAddressOSMesa(const char* procname)
 {
-    _GLFWwindow* window = _glfwPlatformGetCurrentContext();
-
-    if (window->context.osmesa.handle)
-    {
-        return (GLFWglproc) OSMesaGetProcAddress(procname);
-    }
-
-    return NULL;
+    return (GLFWglproc) OSMesaGetProcAddress(procname);
 }
 
 static void destroyContextOSMesa(_GLFWwindow* window)
 {
-    if (window->context.osmesa.handle != NULL)
+    if (window->context.osmesa.handle)
     {
         OSMesaDestroyContext(window->context.osmesa.handle);
         window->context.osmesa.handle = NULL;
     }
 
-    if (window->context.osmesa.buffer != NULL)
+    if (window->context.osmesa.buffer)
     {
         free(window->context.osmesa.buffer);
         window->context.osmesa.width = 0;
@@ -78,14 +87,19 @@ static void destroyContextOSMesa(_GLFWwindow* window)
     }
 }
 
-static void swapBuffersOSMesa(_GLFWwindow* window) {}
+static void swapBuffersOSMesa(_GLFWwindow* window)
+{
+}
 
-static void swapIntervalOSMesa(int interval) {}
+static void swapIntervalOSMesa(int interval)
+{
+}
 
-static int extensionSupportedOSMesa()
+static int extensionSupportedOSMesa(const char* extension)
 {
     return GLFW_FALSE;
 }
+
 
 //////////////////////////////////////////////////////////////////////////
 //////                       GLFW internal API                      //////
@@ -122,8 +136,6 @@ GLFWbool _glfwInitOSMesa(void)
         _glfwInputError(GLFW_API_UNAVAILABLE, "OSMesa: Library not found");
         return GLFW_FALSE;
     }
-
-    _glfw.osmesa.prefix = (strncmp(sonames[i], "lib", 3) == 0);
 
     _glfw.osmesa.CreateContext = (PFNOSMESACREATECONTEXTPROC)
         _glfw_dlsym(_glfw.osmesa.handle, "OSMesaCreateContext");
@@ -182,21 +194,21 @@ GLFWbool _glfwCreateContextOSMesa(_GLFWwindow* window,
     if (ctxconfig->share)
         share = ctxconfig->share->context.osmesa.handle;
 
-    // Initialize the context.
+    // Initialize the context
     window->context.osmesa.buffer = NULL;
     window->context.osmesa.width = 0;
     window->context.osmesa.height = 0;
 
-    // Create to create an OSMesa context.
+    // Create to create an OSMesa context
     window->context.osmesa.handle = OSMesaCreateContext(OSMESA_RGBA, share);
     if (window->context.osmesa.handle == 0)
     {
         _glfwInputError(GLFW_VERSION_UNAVAILABLE,
-                        "OSMesa: Failed to create context.");
+                        "OSMesa: Failed to create context");
         return GLFW_FALSE;
     }
 
-    // Set up the context API.
+    // Set up the context API
     window->context.makeCurrent = makeContextCurrentOSMesa;
     window->context.swapBuffers = swapBuffersOSMesa;
     window->context.swapInterval = swapIntervalOSMesa;
@@ -206,6 +218,7 @@ GLFWbool _glfwCreateContextOSMesa(_GLFWwindow* window,
 
     return GLFW_TRUE;
 }
+
 
 //////////////////////////////////////////////////////////////////////////
 //////                        GLFW native API                       //////
