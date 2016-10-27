@@ -115,6 +115,8 @@ GLFWbool _glfwInitOSMesa(void)
         "OSMesa.dll",
 #elif defined(_GLFW_COCOA)
         "libOSMesa.dylib",
+#elif defined(__CYGWIN__)
+        "libOSMesa-8.so",
 #else
         "libOSMesa.so.6",
 #endif
